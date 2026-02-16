@@ -3,30 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Poharas felület</title>
-<link rel="stylesheet" href="style.css">
-<style>
-body {
-  margin:0;
-  font-family: system-ui, sans-serif;
-  background:#f7f7f7;
-}
-header { background:#4a90e2; color:white; padding:15px; text-align:center; }
-h1 { margin:0; font-size:24px; }
-.container { padding:20px; max-width:800px; margin:0 auto; }
-label { display:block; margin-top:10px; }
-select, input, button { padding:8px; font-size:16px; margin-top:5px; }
-input[type="number"] { width:80px; }
-button { cursor:pointer; margin-left:5px; }
-#autocompleteList { border:1px solid #aaa; max-height:120px; overflow-y:auto; background:white; position:absolute; z-index:10; }
-.autocompleteItem { padding:5px; cursor:pointer; }
-.autocompleteItem:hover { background:#eee; }
-#summary { margin-top:20px; }
-.tableSummary { border-collapse: collapse; width:100%; margin-top:10px; }
-.tableSummary th, .tableSummary td { border:1px solid #aaa; padding:5px; text-align:left; }
-#bottleCollector { margin-top:20px; }
-#bottleCollector input[type="number"] { width:50px; }
-</style>
+<title>Poharas Test Felület</title>
+<link rel="stylesheet" href="poharas.css">
 </head>
 <body>
 
@@ -34,44 +12,35 @@ button { cursor:pointer; margin-left:5px; }
   <h1>Poharas felület</h1>
 </header>
 
-<div class="container">
-  <!-- Pult választás -->
-  <label for="pultSelect">Válaszd ki a pultot:</label>
-  <select id="pultSelect">
-    <option value="Garden">Garden</option>
-    <option value="Pub">Pub</option>
-    <option value="Koncert">Koncert</option>
+<section id="settings">
+  <label for="pulthoz">Válassz pultot:</label>
+  <select id="pulthoz">
+    <option value="garden">Garden</option>
+    <option value="pub">Pub</option>
+    <option value="koncert">Koncert</option>
   </select>
 
-  <!-- Ital kereső -->
-  <label for="drinkInput">Írd be az ital nevét:</label>
-  <input type="text" id="drinkInput" autocomplete="off">
-  <div id="autocompleteList"></div>
+  <label for="search">Ital keresése:</label>
+  <input type="text" id="search" placeholder="Írd az ital nevét...">
 
-  <!-- Mennyiség -->
-  <label for="drinkAmount">Mennyiség:</label>
-  <input type="number" id="drinkAmount" min="1" value="1">
-  <button id="addDrinkBtn">Hozzáadás</button>
+  <label for="quantity">Mennyiség:</label>
+  <input type="number" id="quantity" min="1" value="1">
 
-  <!-- Összesítés -->
-  <button id="showSummaryBtn">Összesítés</button>
+  <button id="addBtn">Hozzáad</button>
+  <button id="summaryBtn">Összesítés</button>
+</section>
 
-  <div id="summary"></div>
+<section id="drinkList">
+  <!-- Itt jelennek meg a kiválasztott italok -->
+</section>
 
-  <!-- Üveggyűjtő -->
-  <div id="bottleCollector">
-    <h3>Üveggyűjtő</h3>
-    <label>Üveg:</label>
-    <input type="number" id="glassCount" min="0" value="0">
-    <label>Műanyag flakon:</label>
-    <input type="number" id="plasticCount" min="0" value="0">
-    <label>Alumínium doboz:</label>
-    <input type="number" id="canCount" min="0" value="0">
-    <button id="showBottleSummaryBtn">Összesítés</button>
-    <div id="bottleSummary"></div>
-  </div>
-</div>
+<section id="bottleCollector">
+  <h2>Üveggyűjtő</h2>
+  <label><input type="radio" name="bottle" value="üveg" checked> Üveg</label>
+  <label><input type="radio" name="bottle" value="műanyag"> Műanyag flakon</label>
+  <label><input type="radio" name="bottle" value="alumínium"> Alumínium doboz</label>
+</section>
 
-<script src="poharas.js"></script>
+<script src="poharas-test.js"></script>
 </body>
 </html>
