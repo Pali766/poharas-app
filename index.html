@@ -1,1 +1,140 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poharas rendszer</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .counter-select {
+      margin-bottom: 20px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background: #eee;
+    }
+
+    button {
+      padding: 8px 14px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .add {
+      background: #4caf50;
+      color: white;
+      border: none;
+    }
+
+    .remove {
+      background: #f44336;
+      color: white;
+      border: none;
+    }
+
+    .bottles {
+      background: white;
+      padding: 15px;
+      border: 1px solid #ccc;
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🍺 Poharas rendszer</h1>
+    <p>Készletkezelés pultonként</p>
+  </header>
+
+  <main>
+
+    <!-- PULT KIVÁLASZTÁS -->
+    <div class="counter-select">
+      <label for="counter">Pult kiválasztása:</label><br/><br/>
+      <select id="counter"></select>
+    </div>
+
+    <!-- ITAL TÁBLA -->
+    <table>
+      <thead>
+        <tr>
+          <th>Ital</th>
+          <th>Művelet</th>
+          <th>Darab</th>
+        </tr>
+      </thead>
+      <tbody id="drinkTable">
+        <!-- JS tölti fel -->
+      </tbody>
+    </table>
+
+    <!-- VISSZAVÁLTHATÓ ÜVEGEK -->
+    <div class="bottles">
+      <h3>🔄 Visszaváltható üvegek</h3>
+      <p>
+        Darabszám:
+        <strong id="bottleCount">0</strong>
+      </p>
+      <button id="bottleAdd" class="add">+1 üveg</button>
+      <button id="bottleRemove" class="remove">-1 üveg</button>
+    </div>
+
+  </main>
+
+  <footer>
+    Poharas rendszer – belső használatra
+  </footer>
+
+  <!-- SCRIPT SORREND FONTOS -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
 
