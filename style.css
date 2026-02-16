@@ -1,225 +1,90 @@
-/* -----------------------------
-   Alap stílusok
------------------------------- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, sans-serif;
-}
-
+/* --- Alap stílusok --- */
 body {
-  background: #f0f0f0;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #ffd6e8, #ffeef6);
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  color: #333;
 }
 
-h1, h2 {
-  color: #222;
+#container {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
   text-align: center;
-  margin-bottom: 20px;
 }
 
-p {
+header h1 {
+  font-size: 28px;
   margin-bottom: 10px;
-}
-
-/* -----------------------------
-   Gombok
------------------------------- */
-button {
-  cursor: pointer;
-  padding: 12px 25px;
-  border-radius: 8px;
-  border: none;
-  background: #d63384;
-  color: white;
-  font-size: 1rem;
-  transition: background 0.3s, transform 0.2s;
-}
-
-button:hover {
-  background: #b02e70;
-  transform: scale(1.05);
-}
-
-button:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-/* -----------------------------
-   Hidden class
------------------------------- */
-.hidden {
-  display: none;
-}
-
-/* -----------------------------
-   Role Selection oldal
------------------------------- */
-#roleSelection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-#roleSelection h1 {
-  font-size: 2rem;
-  margin-bottom: 40px;
-}
-
-#roleSelection button {
-  margin: 10px;
-  width: 200px;
-}
-
-/* -----------------------------
-   Admin UI
------------------------------- */
-#adminUI {
-  padding: 20px;
-  max-width: 900px;
-  width: 95%;
-  margin: auto;
-}
-
-#adminMain table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-#adminMain th, #adminMain td {
-  border: 1px solid #aaa;
-  padding: 10px;
-  text-align: left;
-}
-
-#adminMain th {
-  background: #d63384;
-  color: white;
-}
-
-#adminMain td button {
-  margin-right: 5px;
-  padding: 5px 10px;
-  font-size: 0.9rem;
-}
-
-#adminMain button.addDrink {
-  background: #28a745;
-  margin-top: 10px;
-}
-
-#adminMain button.addDrink:hover {
-  background: #218838;
-}
-
-/* -----------------------------
-   Poharas UI
------------------------------- */
-#poharasUI {
-  padding: 20px;
-  max-width: 600px;
-  width: 95%;
-  margin: auto;
-}
-
-#poharasMain {
-  margin-top: 20px;
-}
-
-.drinkItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.drinkItem span {
-  font-size: 1rem;
-}
-
-.drinkItem button {
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  border-radius: 5px;
-  background: #007bff;
-}
-
-.drinkItem button:hover {
-  background: #0069d9;
-}
-
-/* -----------------------------
-   Visszaváltott üvegek info
------------------------------- */
-#poharasMain div.info {
-  margin-top: 15px;
-  font-weight: bold;
-  text-align: center;
   color: #d63384;
 }
 
-/* -----------------------------
-   Mobil responsív
------------------------------- */
-@media (max-width: 768px) {
-  h1 { font-size: 1.8rem; }
-  h2 { font-size: 1.5rem; }
-  button { font-size: 1rem; padding: 10px 20px; }
-  #adminMain th, #adminMain td { padding: 8px; font-size: 0.9rem; }
-  .drinkItem span { font-size: 0.95rem; }
+header p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 30px;
 }
 
-/* -----------------------------
-   Kis képernyők
------------------------------- */
-@media (max-width: 500px) {
-  h1 { font-size: 1.5rem; margin-bottom: 30px; }
-  button { font-size: 0.9rem; padding: 8px 15px; width: 150px; }
-  #adminMain th, #adminMain td { padding: 6px; font-size: 0.8rem; }
-  .drinkItem span { font-size: 0.85rem; }
-  .drinkItem button { padding: 5px 10px; font-size: 0.8rem; }
-}
-
-/* -----------------------------
-   Modal stílus (ha később használjuk)
------------------------------- */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modalContent {
-  background: white;
+.roleBox {
+  margin-bottom: 30px;
   padding: 20px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  background: #fef0f6;
 }
 
-.modalContent button {
+.roleBox h2 {
+  font-size: 22px;
+  color: #a83264;
+  margin-bottom: 10px;
+}
+
+.roleBox input {
+  padding: 10px;
+  font-size: 16px;
+  width: 80%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.roleBox button {
+  padding: 12px 25px;
+  font-size: 16px;
+  background: #d63384;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.roleBox button:hover {
+  background: #b82e6d;
+}
+
+.roleInfo {
+  font-size: 12px;
+  color: #777;
+  margin-top: 5px;
+}
+
+#message {
+  color: #d63384;
+  font-size: 16px;
   margin-top: 15px;
-  width: 120px;
+}
+
+/* Mobil optimalizálás */
+@media (max-width: 600px){
+  #container { padding: 30px; }
+  header h1 { font-size: 24px; }
+  .roleBox input { width: 90%; }
+  .roleBox button { width: 90%; }
 }
