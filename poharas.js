@@ -1,101 +1,95 @@
-// Példa ital lista (később adminból tölthető)
+// Minta italok
 const DRINKS = [
-  "Sör","Bor","Üdítő","Víz","Whiskey","Rum","Vodka","Koktél","Pepsi","Coca Cola"
+  {name:"Sör", price:450},
+  {name:"Üdítő", price:350},
+  {name:"Bor", price:600},
+  {name:"Whiskey", price:1200},
+  {name:"Vodka", price:1000}
 ];
 
-// Poharas adatai
-const poharasData = {
-  Garden:{}, Pub:{}, Koncert:{}
+// Pulthoz tartozó listák
+const pultok = {
+  garden: [],
+  pub: [],
+  koncert: []
 };
 
-// Üveggyűjtő adatok
-const bottles = {glass:0, plastic:0, can:0};
-
 // DOM elemek
-const pultSelect = document.getElementById("pultSelect");
-const drinkInput = document.getElementById("drinkInput");
-const autocompleteList = document.getElementById("autocompleteList");
-const drinkAmount = document.getElementById("drinkAmount");
-const addDrinkBtn = document.getElementById("addDrinkBtn");
-const showSummaryBtn = document.getElementById("showSummaryBtn");
-const summaryDiv = document.getElementById("summary");
-
-const glassCount = document.getElementById("glassCount");
-const plasticCount = document.getElementById("plasticCount");
-const canCount = document.getElementById("canCount");
-const showBottleSummaryBtn = document.getElementById("showBottleSummaryBtn");
-const bottleSummaryDiv = document.getElementById("bottleSummary");
+const pulthoz = document.getElementById('pulthoz');
+const searchInput = document.getElementById('search');
+const quantityInput = document.getElementById('quantity');
+const addBtn = document.getElementById('addBtn');
+const summaryBtn = document.getElementById('summaryBtn');
+const drinkList = document.getElementById('drinkList');
+const bottleCollector = document.getElementsByName('bottle');
 
 // Autocomplete funkció
-drinkInput.addEventListener("input", ()=>{
-  const val = drinkInput.value.toLowerCase();
-  autocompleteList.innerHTML = "";
-  if(!val) return;
-  DRINKS.filter(d=>d.toLowerCase().includes(val)).forEach(d=>{
-    const div = document.createElement("div");
-    div.className="autocompleteItem";
-    div.textContent=d;
-    div.onclick=()=>{
-      drinkInput.value=d;
-      autocompleteList.innerHTML="";
-    };
-    autocompleteList.appendChild(div);
+searchInput.addEventListener('input', ()=>{
+  const val = searchInput.value.toLowerCase();
+  const matches = DRINKS.filter(d => d.name.toLowerCase().includes(val));
+  // listázás a találatokból
+  drinkList.innerHTML = '';
+  matches.forEach(d=>{
+    const div = document.createElement('div');
+    div.className="drinkCard";
+    div.textContent = `${d.name} - ${d.price} Ft`;
+    div.onclick = ()=>searchInput.value = d.name;
+    drinkList.appendChild(div);
   });
 });
 
-// Ital hozzáadás
-addDrinkBtn.addEventListener("click", ()=>{
-  const pult = pultSelect.value;
-  const drink = drinkInput.value.trim();
-  const amount = parseInt(drinkAmount.value);
-  if(!drink || isNaN(amount) || amount<=0){
-    alert("Add meg az italt és a mennyiséget!");
+// Hozzáadás gomb
+addBtn.addEventListener('click', ()=>{
+  const name = searchInput.value.trim();
+  const qty = parseInt(quantityInput.value);
+  const pulthozVal = pulthoz.value;
+  if(!name || isNaN(qty) || qty<1){
+    alert("Adj meg egy ital nevet és mennyiséget!");
     return;
   }
-  if(!poharasData[pult][drink]) poharasData[pult][drink]=0;
-  poharasData[pult][drink]+=amount;
-  drinkInput.value=""; drinkAmount.value=1;
-  updateSummary();
+  // Ellenőrzés, létezik-e már a listában
+  const existing = pultok[pulthozVal].find(i=>i.name===name);
+  if(existing) existing.qty += qty;
+  else pultok[pulthozVal].push({name:name,qty:qty});
+  updateDrinkList();
+  searchInput.value='';
+  quantityInput.value=1;
 });
 
 // Összesítés
-showSummaryBtn.addEventListener("click", updateSummary);
+summaryBtn.addEventListener('click', ()=>updateDrinkList(true));
 
-function updateSummary(){
-  summaryDiv.innerHTML="";
-  for(const pult in poharasData){
-    summaryDiv.innerHTML += `<h3>${pult}</h3>`;
-    const table = document.createElement("table");
-    table.className="tableSummary";
-    const header = document.createElement("tr");
-    header.innerHTML="<th>Ital</th><th>Mennyiség</th><th>Művelet</th>";
-    table.appendChild(header);
-    for(const drink in poharasData[pult]){
-      const tr = document.createElement("tr");
-      tr.innerHTML=`<td>${drink}</td><td>${poharasData[pult][drink]}</td>`;
-      const td = document.createElement("td");
-      const delBtn = document.createElement("button");
-      delBtn.textContent="Törlés";
-      delBtn.onclick=()=>{
-        delete poharasData[pult][drink];
-        updateSummary();
-      };
-      td.appendChild(delBtn);
-      tr.appendChild(td);
-      table.appendChild(tr);
+function updateDrinkList(showSummary=false){
+  drinkList.innerHTML='';
+  if(showSummary){
+    for(const pult in pultok){
+      const h3 = document.createElement('h3');
+      h3.textContent = pult.toUpperCase();
+      drinkList.appendChild(h3);
+      pultok[pult].forEach(item=>{
+        const div = document.createElement('div');
+        div.className="drinkCard";
+        div.innerHTML = `${item.name} - ${item.qty} db <button class="delBtn">Törlés</button>`;
+        const btn = div.querySelector('button');
+        btn.onclick = ()=>{
+          item.qty--;
+          if(item.qty<=0) {
+            const index = pultok[pult].indexOf(item);
+            pultok[pult].splice(index,1);
+          }
+          updateDrinkList(true);
+        };
+        drinkList.appendChild(div);
+      });
     }
-    summaryDiv.appendChild(table);
+  } else {
+    // Ha nem összesítés, csak autocomplete listázás
   }
 }
 
 // Üveggyűjtő
-showBottleSummaryBtn.addEventListener("click", ()=>{
-  bottles.glass = parseInt(glassCount.value) || 0;
-  bottles.plastic = parseInt(plasticCount.value) || 0;
-  bottles.can = parseInt(canCount.value) || 0;
-  bottleSummaryDiv.innerHTML = `
-    <p>Üveg: ${bottles.glass}</p>
-    <p>Műanyag flakon: ${bottles.plastic}</p>
-    <p>Alumínium doboz: ${bottles.can}</p>
-  `;
-});
+for(const b of bottleCollector){
+  b.addEventListener('change', ()=>console.log("Kiválasztott üveg:",b.value));
+}
+
+// TODO: felhő/GitHub mentés később
