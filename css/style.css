@@ -1,1 +1,87 @@
+/* ===== ALAP ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: #222;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+/* ===== PULT / DRINK FELÜLET ===== */
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Italok táblázat */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background: #fff;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+th {
+  background: #eee;
+}
+
+/* Gombok */
+button {
+  padding: 6px 10px;
+  margin: 2px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.add {
+  background: #4caf50;
+  color: white;
+  border: none;
+}
+
+.remove {
+  background: #f44336;
+  color: white;
+  border: none;
+}
+
+.save {
+  background: #2196f3;
+  color: white;
+  border: none;
+}
+
+/* Input mezők */
+input[type="number"], input[type="text"] {
+  width: 80%;
+  padding: 5px;
+  font-size: 14px;
+}
+
+/* Üveg számláló */
+#bottleCount {
+  font-weight: bold;
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+/* Mobilra */
+@media (max-width: 600px) {
+  table, th, td, input, button {
+    font-size: 12px;
+  }
+}
 
