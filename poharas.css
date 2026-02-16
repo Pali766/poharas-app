@@ -1,1 +1,110 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fff7f9;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+}
+#counterSelection {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+#counterSelection button {
+  padding: 10px 25px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #d63384, #ff77a9);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+#counterSelection button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+#drinkSearch {
+  width: 90%;
+  max-width: 500px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  border: 2px solid #d63384;
+  border-radius: 12px;
+}
+#drinkList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.drinkItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffeef6;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.drinkItem span {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.drinkItem button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+.drinkItem button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.drinkItem button.addBtn { background: #28a745; color: #fff; }
+.drinkItem button.deleteBtn { background: #dc3545; color: #fff; }
+#summary {
+  margin-top: 20px;
+  width: 100%;
+}
+.summarySection {
+  background: #fff0f6;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+.summarySection h3 {
+  color: #d63384;
+  margin-bottom: 10px;
+}
+.bottleCount {
+  font-weight: 600;
+  color: #d63384;
+}
+@media screen and (max-width: 768px) {
+  #counterSelection {
+    flex-direction: column;
+  }
+  .drinkItem {
+    flex-direction: column;
+  }
+  .drinkItem button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
 
