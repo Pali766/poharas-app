@@ -58,90 +58,99 @@ button { cursor:pointer; }
 </div>
 
 <script>
-// Példa data (ha nincs külön data.js)
-const DRINKS = [
-  {name:"Sör", price:450, stock:20},
-  {name:"Üdítő", price:350, stock:15},
-  {name:"Bor", price:600, stock:10}
-];
+document.addEventListener("DOMContentLoaded", () => {
+  // Példa data
+  const DRINKS = [
+    {name:"Sör", price:450, stock:20},
+    {name:"Üdítő", price:350, stock:15},
+    {name:"Bor", price:600, stock:10}
+  ];
 
-// Role selection
-const roleSelection = document.getElementById('roleSelection');
-const adminUI = document.getElementById('adminUI');
-const poharasUI = document.getElementById('poharasUI');
-const poharasMain = document.getElementById('poharasMain');
-const adminMain = document.getElementById('adminMain');
+  // Elemi elemek
+  const roleSelection = document.getElementById('roleSelection');
+  const adminUI = document.getElementById('adminUI');
+  const poharasUI = document.getElementById('poharasUI');
+  const poharasMain = document.getElementById('poharasMain');
+  const adminMain = document.getElementById('adminMain');
 
-document.getElementById('adminBtn').onclick = () => {
-  roleSelection.classList.add('hidden');
-  adminUI.classList.remove('hidden');
-  loadAdmin();
-};
-
-document.getElementById('workerBtn').onclick = () => {
-  roleSelection.classList.add('hidden');
-  poharasUI.classList.remove('hidden');
-  loadPoharas();
-};
-
-/* Poharas felület */
-let bottleCount = 0;
-function loadPoharas() {
-  poharasMain.innerHTML="";
-  DRINKS.forEach((drink,i)=>{
-    const div = document.createElement('div');
-    div.className="drinkItem";
-    div.innerHTML = `<span>${drink.name} - ${drink.price} Ft - Készlet: ${drink.stock}</span>`;
-    const btn = document.createElement('button');
-    btn.textContent="Eladom / Visszaváltom";
-    btn.onclick=()=>{
-      if(drink.stock>0){ drink.stock--; bottleCount++; updatePoharas(); }
-      else alert("Nincs készleten!");
-    };
-    div.appendChild(btn);
-    poharasMain.appendChild(div);
-  });
-  updatePoharas();
-}
-function updatePoharas(){
-  const info = document.createElement('div');
-  info.innerHTML=`<p>Visszaváltott üvegek száma: ${bottleCount}</p>`;
-  poharasMain.appendChild(info);
-}
-
-/* Admin felület */
-function loadAdmin(){
-  adminMain.innerHTML="";
-  const table = document.createElement('table');
-  const header = document.createElement('tr');
-  header.innerHTML="<th>Ital neve</th><th>Ár</th><th>Készlet</th><th>Művelet</th>";
-  table.appendChild(header);
-  DRINKS.forEach((drink,i)=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML=`<td>${drink.name}</td><td>${drink.price}</td><td>${drink.stock}</td>`;
-    const td = document.createElement('td');
-    const btnInc = document.createElement('button');
-    btnInc.textContent="+";
-    btnInc.onclick=()=>{ drink.stock++; loadAdmin(); };
-    const btnDec = document.createElement('button');
-    btnDec.textContent="-";
-    btnDec.onclick=()=>{ if(drink.stock>0) drink.stock--; loadAdmin(); };
-    td.appendChild(btnInc); td.appendChild(btnDec);
-    tr.appendChild(td);
-    table.appendChild(tr);
-  });
-  adminMain.appendChild(table);
-  // Hozzáadás új ital
-  const addBtn = document.createElement('button');
-  addBtn.textContent="Új ital hozzáadása";
-  addBtn.onclick=()=>{
-    const name=prompt("Ital neve:"); if(!name) return;
-    const price=parseInt(prompt("Ár:")); if(isNaN(price)) return;
-    DRINKS.push({name:name,price:price,stock:0});
+  // Role selection gombok
+  document.getElementById('adminBtn').onclick = () => {
+    roleSelection.classList.add('hidden');
+    adminUI.classList.remove('hidden');
     loadAdmin();
   };
-  adminMain.appendChild(addBtn);
-}
+
+  document.getElementById('workerBtn').onclick = () => {
+    roleSelection.classList.add('hidden');
+    poharasUI.classList.remove('hidden');
+    loadPoharas();
+  };
+
+  /* Poharas felület */
+  let bottleCount = 0;
+  function loadPoharas() {
+    poharasMain.innerHTML="";
+    DRINKS.forEach((drink,i)=>{
+      const div = document.createElement('div');
+      div.className="drinkItem";
+      div.innerHTML = `<span>${drink.name} - ${drink.price} Ft - Készlet: ${drink.stock}</span>`;
+      const btn = document.createElement('button');
+      btn.textContent="Eladom / Visszaváltom";
+      btn.onclick=()=>{
+        if(drink.stock>0){ drink.stock--; bottleCount++; updatePoharas(); }
+        else alert("Nincs készleten!");
+      };
+      div.appendChild(btn);
+      poharasMain.appendChild(div);
+    });
+    updatePoharas();
+  }
+
+  function updatePoharas(){
+    const info = document.createElement('div');
+    info.innerHTML=`<p>Visszaváltott üvegek száma: ${bottleCount}</p>`;
+    poharasMain.appendChild(info);
+  }
+
+  /* Admin felület */
+  function loadAdmin(){
+    adminMain.innerHTML="";
+    const table = document.createElement('table');
+    const header = document.createElement('tr');
+    header.innerHTML="<th>Ital neve</th><th>Ár</th><th>Készlet</th><th>Művelet</th>";
+    table.appendChild(header);
+
+    DRINKS.forEach((drink,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML=`<td>${drink.name}</td><td>${drink.price}</td><td>${drink.stock}</td>`;
+      const td = document.createElement('td');
+
+      const btnInc = document.createElement('button');
+      btnInc.textContent="+";
+      btnInc.onclick=()=>{ drink.stock++; loadAdmin(); };
+
+      const btnDec = document.createElement('button');
+      btnDec.textContent="-";
+      btnDec.onclick=()=>{ if(drink.stock>0) drink.stock--; loadAdmin(); };
+
+      td.appendChild(btnInc); td.appendChild(btnDec);
+      tr.appendChild(td);
+      table.appendChild(tr);
+    });
+    adminMain.appendChild(table);
+
+    // Hozzáadás új ital
+    const addBtn = document.createElement('button');
+    addBtn.textContent="Új ital hozzáadása";
+    addBtn.onclick=()=>{
+      const name=prompt("Ital neve:"); if(!name) return;
+      const price=parseInt(prompt("Ár:")); if(isNaN(price)) return;
+      DRINKS.push({name:name,price:price,stock:0});
+      loadAdmin();
+    };
+    adminMain.appendChild(addBtn);
+  }
+});
 </script>
 
 </body>
