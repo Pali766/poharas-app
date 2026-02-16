@@ -60,21 +60,27 @@ const DRINKS = [
   {name:"Bor", price:600, stock:10}
 ];
 
-// DOM elemek
-const roleSelection = document.getElementById('roleSelection');
-const adminUI = document.getElementById('adminUI');
-const poharasUI = document.getElementById('poharasUI');
-const poharasMain = document.getElementById('poharasMain');
-const adminMain = document.getElementById('adminMain');
+// DOM elemek & Role selection gombok
+document.addEventListener("DOMContentLoaded", () => {
+  const roleSelection = document.getElementById('roleSelection');
+  const adminUI = document.getElementById('adminUI');
+  const poharasUI = document.getElementById('poharasUI');
+  const poharasMain = document.getElementById('poharasMain');
+  const adminMain = document.getElementById('adminMain');
 
-let bottleCount = 0;
+  document.getElementById('adminBtn').onclick = () => {
+    roleSelection.classList.add('hidden');
+    adminUI.classList.remove('hidden');
+    loadAdmin();
+  };
 
-// Role selection gombok
-document.getElementById('adminBtn').addEventListener('click', ()=>{
-  roleSelection.classList.add('hidden');
-  adminUI.classList.remove('hidden');
-  loadAdmin();
+  document.getElementById('workerBtn').onclick = () => {
+    roleSelection.classList.add('hidden');
+    poharasUI.classList.remove('hidden');
+    loadPoharas();
+  };
 });
+
 
 document.getElementById('workerBtn').addEventListener('click', ()=>{
   roleSelection.classList.add('hidden');
