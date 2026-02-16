@@ -1,95 +1,130 @@
-// Minta italok
+// -------------------------
+// POHARAS JS
+// -------------------------
 const DRINKS = [
-  {name:"Sör", price:450},
-  {name:"Üdítő", price:350},
-  {name:"Bor", price:600},
-  {name:"Whiskey", price:1200},
-  {name:"Vodka", price:1000}
+  "Sör","Bor","Üdítő","Pepsi","Coca-Cola","Fanta","Sprite","Vízi","Energiaital"
 ];
 
-// Pulthoz tartozó listák
-const pultok = {
+// Pulthoz tartozó lista
+const counters = {
   garden: [],
   pub: [],
-  koncert: []
+  concert: []
 };
 
-// DOM elemek
-const pulthoz = document.getElementById('pulthoz');
-const searchInput = document.getElementById('search');
-const quantityInput = document.getElementById('quantity');
-const addBtn = document.getElementById('addBtn');
-const summaryBtn = document.getElementById('summaryBtn');
-const drinkList = document.getElementById('drinkList');
-const bottleCollector = document.getElementsByName('bottle');
+// Üvegek gyűjtő
+let bottleCounts = { glass:0, plastic:0, can:0 };
 
-// Autocomplete funkció
-searchInput.addEventListener('input', ()=>{
-  const val = searchInput.value.toLowerCase();
-  const matches = DRINKS.filter(d => d.name.toLowerCase().includes(val));
-  // listázás a találatokból
-  drinkList.innerHTML = '';
-  matches.forEach(d=>{
-    const div = document.createElement('div');
-    div.className="drinkCard";
-    div.textContent = `${d.name} - ${d.price} Ft`;
-    div.onclick = ()=>searchInput.value = d.name;
-    drinkList.appendChild(div);
+// DOM elemek
+const counterSelect = document.getElementById("counterSelect");
+const drinkSearch = document.getElementById("drinkSearch");
+const drinkQuantity = document.getElementById("drinkQuantity");
+const addDrinkBtn = document.getElementById("addDrinkBtn");
+const summaryBtn = document.getElementById("summaryBtn");
+const drinkList = document.getElementById("drinkList");
+const suggestions = document.getElementById("suggestions");
+
+const bottleType = document.getElementById("bottleType");
+const bottleQuantity = document.getElementById("bottleQuantity");
+const addBottleBtn = document.getElementById("addBottleBtn");
+const bottleInfo = document.getElementById("bottleInfo");
+
+// -------------------------
+// DRINK ADD / AUTOCOMPLETE
+// -------------------------
+drinkSearch.addEventListener("input", ()=>{
+  const query = drinkSearch.value.toLowerCase();
+  suggestions.innerHTML="";
+  if(query.length===0) return;
+  DRINKS.forEach(d=>{
+    if(d.toLowerCase().includes(query)){
+      const div = document.createElement("div");
+      div.className="suggestion";
+      div.textContent=d;
+      div.onclick=()=>{
+        drinkSearch.value=d;
+        suggestions.innerHTML="";
+      };
+      suggestions.appendChild(div);
+    }
   });
 });
 
-// Hozzáadás gomb
-addBtn.addEventListener('click', ()=>{
-  const name = searchInput.value.trim();
-  const qty = parseInt(quantityInput.value);
-  const pulthozVal = pulthoz.value;
-  if(!name || isNaN(qty) || qty<1){
-    alert("Adj meg egy ital nevet és mennyiséget!");
-    return;
+// -------------------------
+// ADD DRINK
+// -------------------------
+addDrinkBtn.addEventListener("click", ()=>{
+  const drink = drinkSearch.value.trim();
+  const quantity = parseInt(drinkQuantity.value);
+  const counter = counterSelect.value;
+  if(!drink || quantity<1) return alert("Adj meg egy italt és mennyiséget!");
+  
+  for(let i=0;i<quantity;i++){
+    counters[counter].push(drink);
   }
-  // Ellenőrzés, létezik-e már a listában
-  const existing = pultok[pulthozVal].find(i=>i.name===name);
-  if(existing) existing.qty += qty;
-  else pultok[pulthozVal].push({name:name,qty:qty});
-  updateDrinkList();
-  searchInput.value='';
-  quantityInput.value=1;
+  drinkSearch.value="";
+  drinkQuantity.value=1;
+  renderDrinks();
 });
 
-// Összesítés
-summaryBtn.addEventListener('click', ()=>updateDrinkList(true));
+// -------------------------
+// RENDER DRINK LIST
+// -------------------------
+function renderDrinks(){
+  drinkList.innerHTML="";
+  for(const [counter, drinks] of Object.entries(counters)){
+    const div = document.createElement("div");
+    div.className="counterBlock";
+    const title = document.createElement("h4");
+    title.textContent = counter.toUpperCase();
+    div.appendChild(title);
 
-function updateDrinkList(showSummary=false){
-  drinkList.innerHTML='';
-  if(showSummary){
-    for(const pult in pultok){
-      const h3 = document.createElement('h3');
-      h3.textContent = pult.toUpperCase();
-      drinkList.appendChild(h3);
-      pultok[pult].forEach(item=>{
-        const div = document.createElement('div');
-        div.className="drinkCard";
-        div.innerHTML = `${item.name} - ${item.qty} db <button class="delBtn">Törlés</button>`;
-        const btn = div.querySelector('button');
-        btn.onclick = ()=>{
-          item.qty--;
-          if(item.qty<=0) {
-            const index = pultok[pult].indexOf(item);
-            pultok[pult].splice(index,1);
-          }
-          updateDrinkList(true);
-        };
-        drinkList.appendChild(div);
-      });
-    }
-  } else {
-    // Ha nem összesítés, csak autocomplete listázás
+    drinks.forEach((d,i)=>{
+      const dDiv = document.createElement("div");
+      dDiv.className="drinkItem";
+      dDiv.textContent=d + " ";
+      const delBtn = document.createElement("button");
+      delBtn.textContent="Törlés";
+      delBtn.onclick=()=>{
+        drinks.splice(i,1);
+        renderDrinks();
+      };
+      dDiv.appendChild(delBtn);
+      div.appendChild(dDiv);
+    });
+    drinkList.appendChild(div);
   }
 }
 
-// Üveggyűjtő
-for(const b of bottleCollector){
-  b.addEventListener('change', ()=>console.log("Kiválasztott üveg:",b.value));
+// -------------------------
+// SUMMARY BUTTON
+// -------------------------
+summaryBtn.addEventListener("click", ()=>{
+  renderDrinks();
+  alert("Összesítés megjelenítve a lapon.");
+});
+
+// -------------------------
+// BOTTLE ADD
+// -------------------------
+addBottleBtn.addEventListener("click", ()=>{
+  const type = bottleType.value;
+  const qty = parseInt(bottleQuantity.value);
+  if(qty<1) return;
+  bottleCounts[type]+=qty;
+  renderBottles();
+  bottleQuantity.value=1;
+});
+
+// -------------------------
+// RENDER BOTTLES
+// -------------------------
+function renderBottles(){
+  bottleInfo.textContent=`Üvegek visszaváltása: Üveg ${bottleCounts.glass}, Műanyag ${bottleCounts.plastic}, Doboz ${bottleCounts.can}`;
 }
 
-// TODO: felhő/GitHub mentés később
+// -------------------------
+// INIT
+// -------------------------
+renderDrinks();
+renderBottles();
