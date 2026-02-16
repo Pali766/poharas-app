@@ -1,26 +1,21 @@
-// ===== 1. VÁLTOZÓK =====
-const adminDrinkTable = document.getElementById("adminDrinkTable");
-const addDrinkForm = document.getElementById("addDrinkForm");
-const newDrinkName = document.getElementById("newDrinkName");
-const newDrinkPrice = document.getElementById("newDrinkPrice");
+// --- ADMIN.JS ---
 
-// ===== 2. LOCALSTORAGE BETÖLTÉS =====
-function loadDrinks() {
-  const storedDrinks = localStorage.getItem("drinks");
-  if(storedDrinks){
-    return JSON.parse(storedDrinks);
-  } else {
-    localStorage.setItem("drinks", JSON.stringify(DRINKS));
-    return [...DRINKS];
-  }
-}
+// Lekéri a név paramétert a URL-ből
+const urlParams = new URLSearchParams(window.location.search);
+const adminName = urlParams.get('name') || "Admin";
 
-let drinks = loadDrinks();
+// Üdvözlő üzenet
+document.getElementById("welcome").textContent = `Üdvözlünk, ${adminName}! Itt szerkesztheted az italokat.`;
 
-// ===== 3. ITALOK LISTÁZÁSA =====
-function renderAdminDrinks() {
-  adminDrinkTable.innerHTML = "";
-  drinks.forEach((drink, index) => {
+// HTML elemek
+const adminTableBody = document.querySelector("#adminTable tbody");
+const addDrinkBtn = document.getElementById("addDrinkBtn");
+
+// --- Funkció: Admin tábla betöltése ---
+function loadAdminTable(){
+  adminTableBody.innerHTML = ""; // Törli a táblát
+
+  DRINKS.forEach((drink, index)=>{
     const tr = document.createElement("tr");
 
     // Ital neve
@@ -28,60 +23,60 @@ function renderAdminDrinks() {
     tdName.textContent = drink.name;
     tr.appendChild(tdName);
 
-    // Ár
+    // Ital ára
     const tdPrice = document.createElement("td");
-    const priceInput = document.createElement("input");
-    priceInput.type = "number";
-    priceInput.value = drink.price;
-    priceInput.min = 1;
-    priceInput.onchange = () => {
-      drinks[index].price = parseInt(priceInput.value) || 0;
-      saveDrinks();
-    };
-    tdPrice.appendChild(priceInput);
+    tdPrice.textContent = drink.price;
     tr.appendChild(tdPrice);
 
-    // Művelet – törlés
-    const tdAction = document.createElement("td");
-    const removeBtn = document.createElement("button");
-    removeBtn.textContent = "Törlés";
-    removeBtn.className = "remove";
-    removeBtn.onclick = () => {
-      if(confirm(`Biztosan törlöd az italt: ${drink.name}?`)) {
-        drinks.splice(index,1);
-        saveDrinks();
-        renderAdminDrinks();
-      }
-    };
-    tdAction.appendChild(removeBtn);
-    tr.appendChild(tdAction);
+    // Ital készlete
+    const tdStock = document.createElement("td");
+    tdStock.textContent = drink.stock;
+    tr.appendChild(tdStock);
 
-    adminDrinkTable.appendChild(tr);
+    // Műveletek
+    const tdActions = document.createElement("td");
+
+    const btnInc = document.createElement("button");
+    btnInc.textContent = "+";
+    btnInc.addEventListener("click", ()=>{
+      drink.stock++;
+      loadAdminTable();
+    });
+
+    const btnDec = document.createElement("button");
+    btnDec.textContent = "-";
+    btnDec.addEventListener("click", ()=>{
+      if(drink.stock>0) drink.stock--;
+      loadAdminTable();
+    });
+
+    const btnEdit = document.createElement("button");
+    btnEdit.textContent = "Ár módosítása";
+    btnEdit.addEventListener("click", ()=>{
+      const newPrice = parseInt(prompt(`Ár módosítása (${drink.name}):`, drink.price));
+      if(!isNaN(newPrice)) drink.price = newPrice;
+      loadAdminTable();
+    });
+
+    tdActions.appendChild(btnInc);
+    tdActions.appendChild(btnDec);
+    tdActions.appendChild(btnEdit);
+
+    tr.appendChild(tdActions);
+
+    adminTableBody.appendChild(tr);
   });
 }
 
-// ===== 4. MENTÉS LOCALSTORAGE-BE =====
-function saveDrinks() {
-  localStorage.setItem("drinks", JSON.stringify(drinks));
-}
+// --- Új ital hozzáadása ---
+addDrinkBtn.addEventListener("click", ()=>{
+  const name = prompt("Új ital neve:");
+  if(!name) return;
+  const price = parseInt(prompt("Ár (Ft):"));
+  if(isNaN(price)) return;
+  DRINKS.push({name:name, price:price, stock:0});
+  loadAdminTable();
+});
 
-// ===== 5. ÚJ ITAL HOZZÁADÁSA =====
-addDrinkForm.onsubmit = (e) => {
-  e.preventDefault();
-
-  const name = newDrinkName.value.trim();
-  const price = parseInt(newDrinkPrice.value);
-
-  if(!name || price <= 0) return alert("Érvényes nevet és árat adj meg!");
-
-  drinks.push({id: name.toLowerCase().replace(/\s+/g,"_"), name, price});
-  saveDrinks();
-  renderAdminDrinks();
-
-  newDrinkName.value = "";
-  newDrinkPrice.value = "";
-};
-
-// ===== 6. INITIALIZÁCIÓ =====
-renderAdminDrinks();
-
+// --- Betöltés ---
+loadAdminTable();
