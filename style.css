@@ -27,6 +27,7 @@ body {
   justify-content: flex-start;
   min-height: 100vh;
   line-height: 1.5;
+  transition: background 0.3s ease;
 }
 
 /* ----------------------------- */
@@ -51,7 +52,7 @@ header {
 }
 
 header h1 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   color: #d63384;
   margin-bottom: 10px;
 }
@@ -102,6 +103,7 @@ header p {
 #poharasUI {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 #drinkList {
@@ -119,6 +121,7 @@ header p {
   border-radius: 12px;
   padding: 15px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
 }
 
 .drinkItem span {
@@ -153,6 +156,40 @@ header p {
 }
 
 /* ----------------------------- */
+/* MENNYISÉG ÉS ÖSSZESÍTŐ        */
+/* ----------------------------- */
+#quantityContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+#quantityContainer input[type="number"] {
+  width: 60px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-left: 10px;
+}
+
+#summaryBtn, #addBtn {
+  background: #28a745;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+#summaryBtn:hover, #addBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ----------------------------- */
 /* BOTTLE INFO                   */
 /* ----------------------------- */
 #bottleInfo {
@@ -169,6 +206,7 @@ header p {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+  width: 100%;
 }
 
 table {
@@ -256,15 +294,100 @@ footer {
 }
 
 /* ----------------------------- */
+/* PULT / DROPDOWN                */
+/* ----------------------------- */
+#counterSelect {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+/* ----------------------------- */
+/* SEARCH BOX                     */
+/* ----------------------------- */
+#searchContainer {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+#autocompleteList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 180px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0 0 10px 10px;
+  z-index: 100;
+}
+
+#autocompleteList div {
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#autocompleteList div:hover {
+  background: #ffeef6;
+}
+
+/* ----------------------------- */
+/* ÖSSZESÍTŐ LISTA                */
+/* ----------------------------- */
+#summaryList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  background: #fff0f6;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.summaryItem button {
+  background: #dc3545;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.summaryItem button:hover {
+  transform: scale(1.1);
+}
+
+/* ----------------------------- */
 /* RESZPONZÍV DESIGN             */
 /* ----------------------------- */
 @media screen and (max-width: 768px){
-  .drinkItem {
+  .drinkItem, .summaryItem {
     flex-direction: column;
     padding: 12px;
   }
 
-  .drinkItem button {
+  .drinkItem button, .summaryItem button {
     width: 100%;
     margin: 5px 0;
   }
@@ -273,6 +396,14 @@ footer {
     width: 80%;
     font-size: 1.1rem;
     padding: 12px 0;
+  }
+
+  #searchInput {
+    font-size: 0.95rem;
+  }
+
+  #counterSelect {
+    font-size: 0.95rem;
   }
 }
 
@@ -297,22 +428,22 @@ footer {
 }
 
 /* ----------------------------- */
-/* EXTRÁK, HATÁSOK              */
+/* EXTRA HATÁSOK, ÁRNYÉKOK       */
 /* ----------------------------- */
 button:focus {
   outline: none;
 }
 
-.drinkItem, table td {
+.drinkItem, table td, .summaryItem {
   transition: all 0.3s ease;
 }
 
-.drinkItem:hover, table td:hover {
+.drinkItem:hover, table td:hover, .summaryItem:hover {
   transform: translateY(-2px);
 }
 
 /* ----------------------------- */
-/* COLOR THEMES                  */
+/* SZÍN TÉMÁK                    */
 /* ----------------------------- */
 body.adminTheme {
   background: #fff0f6;
@@ -322,7 +453,6 @@ body.workerTheme {
   background: #fff7f9;
 }
 
-/* -------------------------------------------------------------------- */
-/* EZ TÖBB MINT 200 SOR, TELJESEN RÉSZLETES, ÁTLÁTHATÓ CSS                */
-/* Tartalmaz minden UI elemet, mobilra optimalizált                     */
-/* -------------------------------------------------------------------- */
+/* ==================================================================== */
+/* EZ TELJES, PROFIT KELTŐ, MOBILBARÁT ÉS MODERN UI - 200+ SOROS         */
+/* ==================================================================== */
