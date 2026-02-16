@@ -1,70 +1,101 @@
-// --- POHARAS.JS ---
+// Példa ital lista (később adminból tölthető)
+const DRINKS = [
+  "Sör","Bor","Üdítő","Víz","Whiskey","Rum","Vodka","Koktél","Pepsi","Coca Cola"
+];
 
-// Lekéri a felhasználó nevét/kódját az URL-ből
-const urlParams = new URLSearchParams(window.location.search);
-const workerName = urlParams.get('name') || "Poharas";
+// Poharas adatai
+const poharasData = {
+  Garden:{}, Pub:{}, Koncert:{}
+};
 
-document.getElementById("welcome").textContent = `Üdvözlünk, ${workerName}! Itt dolgozhatsz a poharakkal.`;
+// Üveggyűjtő adatok
+const bottles = {glass:0, plastic:0, can:0};
 
-// HTML elemek
-const drinkListDiv = document.getElementById("drinkList");
-const bottleCountSpan = document.getElementById("bottleCount");
+// DOM elemek
+const pultSelect = document.getElementById("pultSelect");
+const drinkInput = document.getElementById("drinkInput");
+const autocompleteList = document.getElementById("autocompleteList");
+const drinkAmount = document.getElementById("drinkAmount");
+const addDrinkBtn = document.getElementById("addDrinkBtn");
+const showSummaryBtn = document.getElementById("showSummaryBtn");
+const summaryDiv = document.getElementById("summary");
 
-// Visszaváltott poharak száma
-let bottleCount = 0;
+const glassCount = document.getElementById("glassCount");
+const plasticCount = document.getElementById("plasticCount");
+const canCount = document.getElementById("canCount");
+const showBottleSummaryBtn = document.getElementById("showBottleSummaryBtn");
+const bottleSummaryDiv = document.getElementById("bottleSummary");
 
-// --- Funkció: Italok listázása ---
-function loadDrinks() {
-  drinkListDiv.innerHTML = ""; // tisztítás
-
-  DRINKS.forEach((drink, i)=>{
+// Autocomplete funkció
+drinkInput.addEventListener("input", ()=>{
+  const val = drinkInput.value.toLowerCase();
+  autocompleteList.innerHTML = "";
+  if(!val) return;
+  DRINKS.filter(d=>d.toLowerCase().includes(val)).forEach(d=>{
     const div = document.createElement("div");
-    div.className = "drinkItem";
-
-    const nameSpan = document.createElement("span");
-    nameSpan.textContent = `${drink.name} - ${drink.price} Ft - Készlet: ${drink.stock}`;
-
-    const sellBtn = document.createElement("button");
-    sellBtn.textContent = "Eladom";
-    sellBtn.addEventListener("click", ()=>{
-      if(drink.stock>0){
-        drink.stock--;
-        bottleCount++;
-        updateUI();
-      } else {
-        alert("Nincs készleten!");
-      }
-    });
-
-    const returnBtn = document.createElement("button");
-    returnBtn.textContent = "Visszaváltom";
-    returnBtn.addEventListener("click", ()=>{
-      bottleCount++;
-      updateUI();
-    });
-
-    div.appendChild(nameSpan);
-    div.appendChild(sellBtn);
-    div.appendChild(returnBtn);
-
-    drinkListDiv.appendChild(div);
+    div.className="autocompleteItem";
+    div.textContent=d;
+    div.onclick=()=>{
+      drinkInput.value=d;
+      autocompleteList.innerHTML="";
+    };
+    autocompleteList.appendChild(div);
   });
+});
 
-  updateUI();
+// Ital hozzáadás
+addDrinkBtn.addEventListener("click", ()=>{
+  const pult = pultSelect.value;
+  const drink = drinkInput.value.trim();
+  const amount = parseInt(drinkAmount.value);
+  if(!drink || isNaN(amount) || amount<=0){
+    alert("Add meg az italt és a mennyiséget!");
+    return;
+  }
+  if(!poharasData[pult][drink]) poharasData[pult][drink]=0;
+  poharasData[pult][drink]+=amount;
+  drinkInput.value=""; drinkAmount.value=1;
+  updateSummary();
+});
+
+// Összesítés
+showSummaryBtn.addEventListener("click", updateSummary);
+
+function updateSummary(){
+  summaryDiv.innerHTML="";
+  for(const pult in poharasData){
+    summaryDiv.innerHTML += `<h3>${pult}</h3>`;
+    const table = document.createElement("table");
+    table.className="tableSummary";
+    const header = document.createElement("tr");
+    header.innerHTML="<th>Ital</th><th>Mennyiség</th><th>Művelet</th>";
+    table.appendChild(header);
+    for(const drink in poharasData[pult]){
+      const tr = document.createElement("tr");
+      tr.innerHTML=`<td>${drink}</td><td>${poharasData[pult][drink]}</td>`;
+      const td = document.createElement("td");
+      const delBtn = document.createElement("button");
+      delBtn.textContent="Törlés";
+      delBtn.onclick=()=>{
+        delete poharasData[pult][drink];
+        updateSummary();
+      };
+      td.appendChild(delBtn);
+      tr.appendChild(td);
+      table.appendChild(tr);
+    }
+    summaryDiv.appendChild(table);
+  }
 }
 
-// --- Funkció: UI frissítése ---
-function updateUI(){
-  bottleCountSpan.textContent = bottleCount;
-  // frissíti az italok készletét
-  const drinkItems = document.querySelectorAll(".drinkItem span");
-  DRINKS.forEach((drink,i)=>{
-    drinkItems[i].textContent = `${drink.name} - ${drink.price} Ft - Készlet: ${drink.stock}`;
-  });
-}
-
-// --- Betöltés ---
-loadDrinks();
-
-// --- Extra mobilbarát interakciók ---
-// például swipe vagy touch eventeket később lehet hozzáadni
+// Üveggyűjtő
+showBottleSummaryBtn.addEventListener("click", ()=>{
+  bottles.glass = parseInt(glassCount.value) || 0;
+  bottles.plastic = parseInt(plasticCount.value) || 0;
+  bottles.can = parseInt(canCount.value) || 0;
+  bottleSummaryDiv.innerHTML = `
+    <p>Üveg: ${bottles.glass}</p>
+    <p>Műanyag flakon: ${bottles.plastic}</p>
+    <p>Alumínium doboz: ${bottles.can}</p>
+  `;
+});
