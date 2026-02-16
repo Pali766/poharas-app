@@ -3,43 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Poharas Test Felület</title>
+<title>Poharas Felület</title>
 <link rel="stylesheet" href="poharas.css">
 </head>
-<body>
+<body class="workerTheme">
 
-<header>
-  <h1>Poharas felület</h1>
-</header>
+<div id="container">
+  <header>
+    <h1>Poharas App</h1>
+    <p>Válaszd ki a pultot és az italt, majd add hozzá!</p>
+  </header>
 
-<section id="settings">
-  <label for="pulthoz">Válassz pultot:</label>
-  <select id="pulthoz">
-    <option value="garden">Garden</option>
-    <option value="pub">Pub</option>
-    <option value="koncert">Koncert</option>
-  </select>
+  <!-- Pult választás -->
+  <section id="counterSelection">
+    <label for="counterSelect">Pult kiválasztása:</label>
+    <select id="counterSelect">
+      <option value="garden">Garden</option>
+      <option value="pub">Pub</option>
+      <option value="concert">Koncert</option>
+    </select>
+  </section>
 
-  <label for="search">Ital keresése:</label>
-  <input type="text" id="search" placeholder="Írd az ital nevét...">
+  <!-- Ital kereső -->
+  <section id="drinkInputSection">
+    <label for="drinkSearch">Ital keresése:</label>
+    <input type="text" id="drinkSearch" placeholder="Írd be az ital nevét...">
+    <div id="suggestions"></div>
+    <label for="drinkQuantity">Mennyiség:</label>
+    <input type="number" id="drinkQuantity" value="1" min="1">
+    <button id="addDrinkBtn">Hozzáad</button>
+    <button id="summaryBtn">Összesítés</button>
+  </section>
 
-  <label for="quantity">Mennyiség:</label>
-  <input type="number" id="quantity" min="1" value="1">
+  <!-- Ital lista pultonként -->
+  <section id="drinkListSection">
+    <div id="drinkList"></div>
+  </section>
 
-  <button id="addBtn">Hozzáad</button>
-  <button id="summaryBtn">Összesítés</button>
-</section>
-
-<section id="drinkList">
-  <!-- Itt jelennek meg a kiválasztott italok -->
-</section>
-
-<section id="bottleCollector">
-  <h2>Üveggyűjtő</h2>
-  <label><input type="radio" name="bottle" value="üveg" checked> Üveg</label>
-  <label><input type="radio" name="bottle" value="műanyag"> Műanyag flakon</label>
-  <label><input type="radio" name="bottle" value="alumínium"> Alumínium doboz</label>
-</section>
+  <!-- Visszaváltott üveg info -->
+  <section id="bottleSection">
+    <h3>Üvegek visszaváltása</h3>
+    <select id="bottleType">
+      <option value="glass">Üveg</option>
+      <option value="plastic">Műanyag flakon</option>
+      <option value="can">Alumínium doboz</option>
+    </select>
+    <input type="number" id="bottleQuantity" value="1" min="1">
+    <button id="addBottleBtn">Hozzáad</button>
+    <div id="bottleInfo">Visszaváltott üvegek: 0</div>
+  </section>
+</div>
 
 <script src="poharas.js"></script>
 </body>
