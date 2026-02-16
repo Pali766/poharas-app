@@ -1,23 +1,53 @@
-// ===== PULTOK =====
-const COUNTERS = ["Garden", "Pub", "Koncert"];
+/* =========================
+   PULTOK (később bővíthető)
+   ========================= */
 
-// ===== ITALOK (közösek minden pultra) =====
-const DRINKS = [
-  { id: 1, name: "Sör", price: 1200, refundable: true },
-  { id: 2, name: "Bor", price: 1500, refundable: false },
-  { id: 3, name: "Üdítő", price: 800, refundable: true }
+const COUNTERS = [
+  "Garden",
+  "Pub",
+  "Koncert"
 ];
 
-// ===== ALAP KÉSZLETEK (ha még nincs localStorage) =====
-const DEFAULT_STOCKS = {
-  Garden: { 1: 0, 2: 0, 3: 0 },
-  Pub: { 1: 0, 2: 0, 3: 0 },
-  Koncert: { 1: 0, 2: 0, 3: 0 }
-};
 
-const DEFAULT_BOTTLES = {
-  Garden: 0,
-  Pub: 0,
-  Koncert: 0
-};
+/* =========================
+   ITALOK
+   - minden pultnál ugyanaz
+   - árakat itt tároljuk,
+     de a poharas nem látja
+   ========================= */
 
+const DRINKS = [
+  {
+    id: "sor",
+    name: "Sör",
+    price: 900
+  },
+  {
+    id: "frccs",
+    name: "Fröccs",
+    price: 800
+  },
+  {
+    id: "bor",
+    name: "Bor",
+    price: 850
+  },
+  {
+    id: "cola",
+    name: "Cola",
+    price: 700
+  },
+  {
+    id: "viz",
+    name: "Ásványvíz",
+    price: 500
+  }
+];
+
+
+/* =========================
+   ALAP ÉRTÉKEK
+   ========================= */
+
+const DEFAULT_DRINK_COUNT = 0;
+const DEFAULT_BOTTLE_COUNT = 0;
