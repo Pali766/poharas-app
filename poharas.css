@@ -1,110 +1,75 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* ----------------------------- */
+/* POHARAS CSS                   */
+/* ----------------------------- */
+body.workerTheme {
   background: #fff7f9;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-}
-#counterSelection {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-}
-#counterSelection button {
-  padding: 10px 25px;
-  font-size: 1.1rem;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #d63384, #ff77a9);
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-#counterSelection button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-#drinkSearch {
-  width: 90%;
-  max-width: 500px;
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  font-size: 1rem;
-  border: 2px solid #d63384;
-  border-radius: 12px;
-}
-#drinkList {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.drinkItem {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: #ffeef6;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+#container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
-.drinkItem span {
-  font-size: 1rem;
-  margin-bottom: 10px;
+
+header h1 { color: #d63384; font-size: 2.2rem; text-align:center; }
+header p { color: #555; text-align:center; margin-bottom:20px; }
+
+#counterSelection, #drinkInputSection, #drinkListSection, #bottleSection {
+  margin-bottom: 25px;
 }
-.drinkItem button {
-  padding: 10px 20px;
-  border: none;
+
+#counterSelect, #drinkSearch, #drinkQuantity, #bottleQuantity, #bottleType {
+  padding: 10px;
   border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-right: 10px;
-  transition: all 0.3s ease;
-}
-.drinkItem button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-.drinkItem button.addBtn { background: #28a745; color: #fff; }
-.drinkItem button.deleteBtn { background: #dc3545; color: #fff; }
-#summary {
-  margin-top: 20px;
-  width: 100%;
-}
-.summarySection {
-  background: #fff0f6;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-}
-.summarySection h3 {
-  color: #d63384;
-  margin-bottom: 10px;
-}
-.bottleCount {
-  font-weight: 600;
-  color: #d63384;
-}
-@media screen and (max-width: 768px) {
-  #counterSelection {
-    flex-direction: column;
-  }
-  .drinkItem {
-    flex-direction: column;
-  }
-  .drinkItem button {
-    width: 100%;
-    margin: 5px 0;
-  }
+  border:1px solid #ccc;
+  font-size: 1rem;
+  width:100%;
+  margin-bottom:10px;
 }
 
+button {
+  background: #d63384;
+  color:#fff;
+  border:none;
+  padding:10px 20px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  margin-top:5px;
+  transition: all 0.3s ease;
+}
+
+button:hover { transform: scale(1.05); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+
+#drinkList .counterBlock { margin-bottom:15px; }
+
+.drinkItem { 
+  background:#ffeef6;
+  padding:8px 12px;
+  border-radius:10px;
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:5px;
+}
+
+.suggestion {
+  background:#fff;
+  border:1px solid #ccc;
+  padding:5px 10px;
+  cursor:pointer;
+}
+
+.suggestion:hover {
+  background:#ffeef6;
+}
+
+/* MOBILE */
+@media screen and (max-width:768px){
+  header h1 { font-size:1.8rem; }
+  #drinkSearch, #drinkQuantity, #counterSelect, #bottleQuantity, #bottleType { font-size:0.9rem; }
+  button { font-size:0.9rem; padding:8px 15px; }
+}
