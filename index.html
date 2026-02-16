@@ -2,161 +2,222 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Poharas / Admin App</title>
-<style>
-/* Reset és alap */
-* { box-sizing: border-box; margin:0; padding:0; }
-html, body { width:100%; height:100%; font-family: system-ui, sans-serif; background:#f0f0f0; }
-
-/* Teljes képernyős konténerek */
-.hidden { display:none; }
-.fullscreen { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-
-/* Role selection */
-#roleSelection button { margin:10px; padding:15px 30px; font-size:18px; border:none; border-radius:8px; background:#d63384; color:white; cursor:pointer; }
-#roleSelection button:active { background:#a0265e; }
-
-/* Poharas UI */
-#poharasUI, #adminUI { padding:20px; overflow:auto; flex-direction:column; align-items:center; }
-header h1 { margin-bottom:20px; text-align:center; color:#d63384; }
-
-/* Poharas italok */
-#poharasMain { width:90%; max-width:500px; }
-.drinkItem { display:flex; justify-content:space-between; margin-bottom:10px; background:white; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-.drinkItem button { margin-left:10px; padding:5px 10px; border:none; border-radius:5px; background:#4CAF50; color:white; font-weight:bold; }
-.drinkItem button:active { background:#3e8e41; }
-
-/* Admin UI */
-table { border-collapse:collapse; width:90%; max-width:600px; margin-bottom:20px; }
-table, th, td { border:1px solid #aaa; }
-th, td { padding:8px; text-align:left; }
-table tr:nth-child(even) { background:#f9f9f9; }
-button { cursor:pointer; border:none; border-radius:5px; padding:5px 10px; background:#d63384; color:white; font-weight:bold; }
-button:active { background:#a0265e; }
-
-/* Mobilbarát scroll / container */
-main { width:100%; flex:1; overflow-y:auto; display:flex; flex-direction:column; align-items:center; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Role selection -->
-<div id="roleSelection" class="fullscreen">
+<!-- -----------------------------
+     Role selection
+------------------------------ -->
+<div id="roleSelection">
   <h1>Hogyan szeretnéd futtatni a programot?</h1>
   <button id="adminBtn">Rendszergazda</button>
   <button id="workerBtn">Poharas</button>
 </div>
 
-<!-- Poharas felület -->
-<div id="poharasUI" class="fullscreen hidden">
-  <header>
-    <h1>Poharas felület</h1>
-  </header>
-  <main id="poharasMain"></main>
+<!-- -----------------------------
+     Admin belépés kód
+------------------------------ -->
+<div id="adminLogin" class="hidden">
+  <h1>Admin belépés</h1>
+  <input type="text" id="adminCode" placeholder="Írd be a belépési kódot">
+  <button id="adminSubmit">Belépés</button>
+  <p id="adminError" style="color:red; margin-top:10px;"></p>
 </div>
 
-<!-- Admin felület -->
-<div id="adminUI" class="fullscreen hidden">
-  <header>
-    <h1>Admin felület</h1>
-  </header>
+<!-- -----------------------------
+     Poharas belépés kód
+------------------------------ -->
+<div id="workerLogin" class="hidden">
+  <h1>Poharas belépés</h1>
+  <input type="text" id="workerCode" placeholder="Írd be a belépési kódot">
+  <button id="workerSubmit">Belépés</button>
+  <p id="workerError" style="color:red; margin-top:10px;"></p>
+</div>
+
+<!-- -----------------------------
+     Admin felület
+------------------------------ -->
+<div id="adminUI" class="hidden">
+  <header><h1>Admin felület</h1></header>
   <main id="adminMain"></main>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function(){
+<!-- -----------------------------
+     Poharas felület
+------------------------------ -->
+<div id="poharasUI" class="hidden">
+  <header><h1>Poharas felület</h1></header>
+  <main id="poharasMain"></main>
+</div>
 
+<script>
+/* -----------------------------
+     Példa data
+------------------------------ */
 const DRINKS = [
   {name:"Sör", price:450, stock:20},
   {name:"Üdítő", price:350, stock:15},
   {name:"Bor", price:600, stock:10}
 ];
 
-// DOM elemek
+/* -----------------------------
+     Admin kódok
+------------------------------ */
+const ADMIN_CODES = {
+  "Admin2026/1": "Peti",
+  "Admin2026/2": "Jani"
+};
+
+/* -----------------------------
+     Poharas kódok
+     (P+vezeték+keresztnév+születésnap)
+------------------------------ */
+const WORKER_CODES = {
+  "PPJ01": "Péter J.",
+  "PMK15": "Márta K."
+};
+
+/* -----------------------------
+     DOM elemek
+------------------------------ */
 const roleSelection = document.getElementById('roleSelection');
-const adminUI = document.getElementById('adminUI');
-const poharasUI = document.getElementById('poharasUI');
-const poharasMain = document.getElementById('poharasMain');
-const adminMain = document.getElementById('adminMain');
 const adminBtn = document.getElementById('adminBtn');
 const workerBtn = document.getElementById('workerBtn');
 
-// Role választás
-adminBtn.onclick = () => {
-  roleSelection.classList.add('hidden');
-  adminUI.classList.remove('hidden');
-  loadAdmin();
-};
-workerBtn.onclick = () => {
-  roleSelection.classList.add('hidden');
-  poharasUI.classList.remove('hidden');
-  loadPoharas();
-};
+const adminLogin = document.getElementById('adminLogin');
+const adminCodeInput = document.getElementById('adminCode');
+const adminSubmit = document.getElementById('adminSubmit');
+const adminError = document.getElementById('adminError');
 
-// Poharas felület
-let bottleCount = 0;
-function loadPoharas() {
-  poharasMain.innerHTML="";
-  DRINKS.forEach((drink)=>{
-    const div = document.createElement('div');
-    div.className="drinkItem";
-    div.innerHTML = `<span>${drink.name} - ${drink.price} Ft - Készlet: ${drink.stock}</span>`;
-    const btn = document.createElement('button');
-    btn.textContent="Eladom / Visszaváltom";
-    btn.onclick=()=>{
-      if(drink.stock>0){ 
-        drink.stock--; 
-        bottleCount++; 
-        updatePoharas(); 
-      } else alert("Nincs készleten!");
-    };
-    div.appendChild(btn);
-    poharasMain.appendChild(div);
-  });
-  updatePoharas();
-}
-function updatePoharas(){
-  const info = document.createElement('div');
-  info.innerHTML=`<p>Visszaváltott üvegek száma: ${bottleCount}</p>`;
-  poharasMain.appendChild(info);
-}
+const workerLogin = document.getElementById('workerLogin');
+const workerCodeInput = document.getElementById('workerCode');
+const workerSubmit = document.getElementById('workerSubmit');
+const workerError = document.getElementById('workerError');
 
-// Admin felület
+const adminUI = document.getElementById('adminUI');
+const poharasUI = document.getElementById('poharasUI');
+const adminMain = document.getElementById('adminMain');
+const poharasMain = document.getElementById('poharasMain');
+
+/* -----------------------------
+     Role selection gombok
+------------------------------ */
+adminBtn.addEventListener("click", ()=>{
+  roleSelection.classList.add('hidden');
+  adminLogin.classList.remove('hidden');
+});
+
+workerBtn.addEventListener("click", ()=>{
+  roleSelection.classList.add('hidden');
+  workerLogin.classList.remove('hidden');
+});
+
+/* -----------------------------
+     Admin belépés ellenőrzés
+------------------------------ */
+adminSubmit.addEventListener("click", ()=>{
+  const code = adminCodeInput.value.trim();
+  if(ADMIN_CODES[code]){
+    adminLogin.classList.add('hidden');
+    adminUI.classList.remove('hidden');
+    loadAdmin();
+  } else {
+    adminError.textContent = "Hibás kód!";
+  }
+});
+
+/* -----------------------------
+     Poharas belépés ellenőrzés
+------------------------------ */
+workerSubmit.addEventListener("click", ()=>{
+  const code = workerCodeInput.value.trim();
+  if(WORKER_CODES[code]){
+    workerLogin.classList.add('hidden');
+    poharasUI.classList.remove('hidden');
+    loadPoharas();
+  } else {
+    workerError.textContent = "Hibás kód!";
+  }
+});
+
+/* -----------------------------
+     Admin felület betöltés
+------------------------------ */
 function loadAdmin(){
   adminMain.innerHTML="";
   const table = document.createElement('table');
   const header = document.createElement('tr');
   header.innerHTML="<th>Ital neve</th><th>Ár</th><th>Készlet</th><th>Művelet</th>";
   table.appendChild(header);
-  DRINKS.forEach((drink)=>{
+
+  DRINKS.forEach((drink,i)=>{
     const tr = document.createElement('tr');
     tr.innerHTML=`<td>${drink.name}</td><td>${drink.price}</td><td>${drink.stock}</td>`;
     const td = document.createElement('td');
+
     const btnInc = document.createElement('button');
     btnInc.textContent="+";
-    btnInc.onclick=()=>{ drink.stock++; loadAdmin(); };
+    btnInc.addEventListener("click", ()=>{
+      drink.stock++; loadAdmin();
+    });
+
     const btnDec = document.createElement('button');
     btnDec.textContent="-";
-    btnDec.onclick=()=>{ if(drink.stock>0) drink.stock--; loadAdmin(); };
-    td.appendChild(btnInc); td.appendChild(btnDec);
+    btnDec.addEventListener("click", ()=>{
+      if(drink.stock>0) drink.stock--; loadAdmin();
+    });
+
+    td.appendChild(btnInc);
+    td.appendChild(btnDec);
     tr.appendChild(td);
     table.appendChild(tr);
   });
+
   adminMain.appendChild(table);
 
   const addBtn = document.createElement('button');
-  addBtn.textContent="Új ital hozzáadása";
-  addBtn.onclick=()=>{
-    const name=prompt("Ital neve:"); if(!name) return;
-    const price=parseInt(prompt("Ár:")); if(isNaN(price)) return;
-    DRINKS.push({name:name,price:price,stock:0});
+  addBtn.textContent = "Új ital hozzáadása";
+  addBtn.className="addDrink";
+  addBtn.addEventListener("click", ()=>{
+    const name = prompt("Ital neve:"); if(!name) return;
+    const price = parseInt(prompt("Ár:")); if(isNaN(price)) return;
+    DRINKS.push({name:name, price:price, stock:0});
     loadAdmin();
-  };
+  });
   adminMain.appendChild(addBtn);
 }
 
-});
+/* -----------------------------
+     Poharas felület betöltés
+------------------------------ */
+let bottleCount = 0;
+function loadPoharas(){
+  poharasMain.innerHTML="";
+  DRINKS.forEach((drink)=>{
+    const div = document.createElement('div');
+    div.className="drinkItem";
+    div.innerHTML=`<span>${drink.name} - ${drink.price} Ft - Készlet: ${drink.stock}</span>`;
+    const btn = document.createElement('button');
+    btn.textContent="Eladom / Visszaváltom";
+    btn.addEventListener("click", ()=>{
+      if(drink.stock>0){
+        drink.stock--;
+        bottleCount++;
+        loadPoharas();
+      } else alert("Nincs készleten!");
+    });
+    div.appendChild(btn);
+    poharasMain.appendChild(div);
+  });
+
+  const info = document.createElement('div');
+  info.className="info";
+  info.textContent=`Visszaváltott üvegek száma: ${bottleCount}`;
+  poharasMain.appendChild(info);
+}
 </script>
 
 </body>
