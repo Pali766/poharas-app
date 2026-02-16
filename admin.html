@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poharas rendszer – Admin</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h2 {
+      margin-top: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background: #eee;
+    }
+
+    input[type="text"], input[type="number"] {
+      padding: 6px;
+      font-size: 14px;
+      width: 90%;
+    }
+
+    button {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      margin: 2px;
+    }
+
+    .add {
+      background: #4caf50;
+      color: white;
+      border: none;
+    }
+
+    .remove {
+      background: #f44336;
+      color: white;
+      border: none;
+    }
+
+    .save {
+      background: #2196f3;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🍺 Poharas rendszer – Admin felület</h1>
+    <p>Itt módosíthatod az italokat</p>
+  </header>
+
+  <main>
+
+    <!-- ITALOK TÁBLÁJA -->
+    <h2>Italok</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Ital neve</th>
+          <th>Ár (Ft)</th>
+          <th>Művelet</th>
+        </tr>
+      </thead>
+      <tbody id="adminDrinkTable">
+        <!-- JS tölti -->
+      </tbody>
+    </table>
+
+    <!-- ÚJ ITAL HOZZÁADÁSA -->
+    <h2>Új ital hozzáadása</h2>
+    <form id="addDrinkForm">
+      <label>
+        Ital neve:<br/>
+        <input type="text" id="newDrinkName" required />
+      </label>
+      <br/><br/>
+      <label>
+        Ár (Ft):<br/>
+        <input type="number" id="newDrinkPrice" required min="1" />
+      </label>
+      <br/><br/>
+      <button type="submit" class="add">Hozzáadás</button>
+    </form>
+
+  </main>
+
+  <footer>
+    Poharas rendszer – admin felület
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>
 
